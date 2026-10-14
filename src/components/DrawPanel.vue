@@ -97,7 +97,8 @@ function markWatched() {
                 <Select v-model="userId" :options="userOptions" option-label="label" option-value="value"
                         placeholder="Tutti gli utenti" show-clear :disabled="!userOptions.length"
                         class="draw-filter" aria-label="Utente" />
-                <Button label="Estrai" icon="pi pi-sparkles" size="large"
+                <!-- Su mobile sale in alto a destra, accanto al titolo (style.css). -->
+                <Button label="Estrai" icon="pi pi-sparkles" size="large" class="draw-button"
                         :loading="busy" :disabled="!candidates" @click="draw" />
             </div>
             <small class="text-muted">

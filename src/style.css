@@ -124,6 +124,23 @@ h1, h2 {
     min-width: 10rem;
 }
 
+/* Su mobile "Estrai" sta in alto a destra, sulla riga del titolo, e non piu'
+   sotto i filtri: si raggiunge senza scorrere. Due classi per battere il CSS
+   di PrimeVue, che entra nella pagina dopo questo file. */
+.draw-panel {
+    position: relative;
+}
+
+@media (max-width: 480px) {
+    .draw-panel .draw-button {
+        position: absolute;
+        top: 0.9rem;
+        right: 1.25rem;
+        padding: 0.4rem 0.9rem;
+        font-size: 1rem;
+    }
+}
+
 .draw-result {
     position: relative;
     margin-top: 1.25rem;
