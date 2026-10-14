@@ -118,6 +118,8 @@ function markWatched() {
                  quando esce di nuovo lo stesso film. -->
             <Transition name="pick" mode="out-in">
                 <div v-if="store.lastPick" :key="store.lastPick.pick_id" class="draw-result">
+                    <Button icon="pi pi-times" severity="secondary" text rounded class="draw-close"
+                            v-tooltip.top="'Chiudi'" aria-label="Chiudi" @click="store.lastPick = null" />
                     <MovieCard :movie="store.lastPick.movie">
                         <Tag v-if="store.lastPick.movie.watched" severity="success" value="Visto" icon="pi pi-check" />
                         <template v-else>

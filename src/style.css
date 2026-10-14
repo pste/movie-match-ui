@@ -125,7 +125,19 @@ h1, h2 {
 }
 
 .draw-result {
+    position: relative;
     margin-top: 1.25rem;
+}
+
+/* La "x" in alto a destra sulla card: il titolo non ci passa sotto. */
+.draw-close {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+}
+
+.draw-result .movie-card {
+    padding-right: 2.75rem;
 }
 
 .pick-enter-active,
