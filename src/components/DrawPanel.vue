@@ -101,15 +101,14 @@ function markWatched() {
                 <Button label="Estrai" icon="pi pi-sparkles" size="large" class="draw-button"
                         :loading="busy" :disabled="!candidates" @click="draw" />
             </div>
-            <small class="text-muted">
-                <template v-if="candidates">{{ candidates }} film in gioco</template>
-                <template v-else-if="filtered">Nessun film con questi filtri.</template>
+            <!-- Solo quando non c'e' niente da estrarre: spiega perche' "Estrai" e' spento. -->
+            <small v-if="!candidates" class="text-muted">
+                <template v-if="filtered">Nessun film con questi filtri.</template>
                 <template v-else>Nessun film da vedere: aggiungine qualcuno alla lista.</template>
             </small>
 
             <!-- Chi ha avuto meno film visti ha piu' probabilita' di uscire. -->
             <div v-if="odds.length" class="draw-odds">
-                <small class="text-muted">Probabilità:</small>
                 <Tag v-for="row in odds" :key="row.user_id ?? 'none'" :value="oddsLabel(row)"
                      :severity="row.user_id ? 'secondary' : 'warn'" icon="pi pi-user"
                      v-tooltip.top="oddsTooltip(row)" />

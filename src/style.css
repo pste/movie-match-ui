@@ -115,6 +115,7 @@ h1, h2 {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    padding-top: 0.625rem;
     margin-bottom: 0.5rem;
 }
 
