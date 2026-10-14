@@ -6,7 +6,7 @@ import useLoadingStore from '@/stores/loading';
 // sviluppo il proxy di Vite (vite.config.js).
 const apiURL = '/api';
 
-// FastAPI risponde agli errori con { detail }: una stringa per quelli sollevati
+// L'API risponde agli errori con { detail }: una stringa per quelli sollevati
 // dal codice, una lista per gli errori di validazione dei dati.
 function errorMessage(data, status) {
     if (typeof data.detail === 'string') {
