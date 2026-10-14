@@ -6,9 +6,6 @@ import useMoviesStore from '@/stores/movies';
 // Gli utenti: solo nomi, con quanti film hanno in gara e quanti gia' visti.
 const useUsersStore = defineStore('users', () => {
     const users = ref([]);
-    // L'ultimo utente scelto aggiungendo un film: chi aggiunge di solito ne
-    // aggiunge piu' d'uno di fila. Solo in memoria, per la sessione.
-    const lastUserId = ref(null);
 
     // Le opzioni per i Select di PrimeVue.
     const options = computed(() => users.value.map((user) => ({ label: user.name, value: user.user_id })));
@@ -34,7 +31,7 @@ const useUsersStore = defineStore('users', () => {
         await load();
     }
 
-    return { users, lastUserId, options, load, save, remove };
+    return { users, options, load, save, remove };
 });
 
 export default useUsersStore;

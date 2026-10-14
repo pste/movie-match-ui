@@ -18,13 +18,9 @@ const toast = useToast();
 
 const userId = ref(null);
 
-// Chi propone: l'ultimo scelto in questa sessione, se esiste ancora, o
-// l'unico utente se ce n'e' uno solo.
+// Chi propone: vuoto a ogni apertura, va scelto ogni volta; solo se c'e' un
+// utente unico e' gia' lui.
 function defaultUserId() {
-    const known = users.users.some((user) => user.user_id === users.lastUserId);
-    if (known) {
-        return users.lastUserId;
-    }
     return users.users.length === 1 ? users.users[0].user_id : null;
 }
 
@@ -88,7 +84,6 @@ async function add(result) {
     adding.value = result.imdb_id;
     try {
         await store.addMovie(result, userId.value);
-        users.lastUserId = userId.value;
         toast.add({ severity: 'success', summary: 'Aggiunto', detail: result.title, life: 2500 });
         visible.value = false;
     }
