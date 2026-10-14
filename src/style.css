@@ -147,8 +147,10 @@ h1, h2 {
     margin-top: 1.25rem;
 }
 
-/* La "x" in alto a destra sulla card: il titolo non ci passa sotto. */
-.draw-close {
+/* La "x" in alto a destra dentro la card: il titolo non ci passa sotto. Due
+   classi: il .p-button di PrimeVue ha position: relative ed entra nella
+   pagina dopo questo file. */
+.draw-result .draw-close {
     position: absolute;
     top: 0.25rem;
     right: 0.25rem;
