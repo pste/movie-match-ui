@@ -251,6 +251,11 @@ h1, h2 {
     }
 }
 
+/* La "x" che svuota la ricerca (SearchBox). */
+.search-box .search-box-clear {
+    cursor: pointer;
+}
+
 .movie-list-head {
     display: flex;
     align-items: center;
