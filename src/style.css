@@ -229,8 +229,8 @@ h1, h2 {
 
 @media (max-width: 480px) {
     .poster-large {
-        width: 5.5rem;
-        height: 8.25rem;
+        width: 7rem;
+        height: 10.5rem;
     }
 }
 
@@ -247,10 +247,12 @@ h1, h2 {
     padding: 0;
 }
 
+/* flex-wrap: i generi vanno a capo su una riga intera. */
 .movie-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.25rem 0.75rem;
     padding: 0.5rem 0;
     border-bottom: 1px solid var(--p-content-border-color);
 }
@@ -346,23 +348,58 @@ h1, h2 {
     font-size: 0.75rem;
 }
 
+.movie-row-user {
+    margin-top: 0.2rem;
+}
+
 .movie-row-tag {
-    margin-left: 0.5rem;
     font-size: 0.75rem;
     padding: 0.05rem 0.4rem;
 }
 
+/* Su desktop i generi partono allineati al testo (locandina 2.5rem + gap
+   0.75rem); su mobile occupano tutta la riga, sotto anche la locandina. */
 .movie-row-genres {
+    flex-basis: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
-    margin-top: 0.25rem;
+    padding-left: 3.25rem;
 }
 
-.movie-row-genre {
+/* Due classi: il CSS di PrimeVue entra nella pagina dopo questo file, e con
+   la sola .movie-row-genre il suo .p-tag vincerebbe. */
+.movie-row-genres .movie-row-genre {
     font-size: 0.7rem;
     font-weight: 500;
     padding: 0 0.35rem;
+}
+
+@media (max-width: 480px) {
+    /* Bottoni in colonna e piu' piccoli: lo spazio va alla locandina, 2:3
+       come le altre. */
+    .movie-row-actions {
+        flex-direction: column;
+    }
+
+    .movie-row-actions .p-button {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .movie-row .poster-small {
+        width: 5.5rem;
+        height: 8.25rem;
+    }
+
+    .movie-row-genres {
+        padding-left: 0;
+    }
+
+    .movie-row-genres .movie-row-genre {
+        font-size: 0.6rem;
+        padding: 0 0.25rem;
+    }
 }
 
 /* ---------- tabelle ---------- */
