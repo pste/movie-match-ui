@@ -5,7 +5,7 @@ import useMovieActions from '@/composables/useMovieActions';
 import { formatDate } from '@/composables/useFormat';
 import useMoviesStore from '@/stores/movies';
 
-// I film scelti davvero: quelli segnati come visti ("Lo guardiamo!"). La data
+// I film scelti davvero: quelli segnati come visti ("Watch it!"). La data
 // e' il momento in cui sono stati scelti, cioe' movies.watched.
 const store = useMoviesStore();
 const { toggleWatched, askDelete } = useMovieActions();

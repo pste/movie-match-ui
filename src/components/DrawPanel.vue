@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import MovieCard from '@/components/MovieCard.vue';
+import PlatformLinks from '@/components/PlatformLinks.vue';
 import useMoviesStore from '@/stores/movies';
 import useUsersStore from '@/stores/users';
 
@@ -121,12 +122,15 @@ function markWatched() {
                     <Button icon="pi pi-times" severity="secondary" text rounded class="draw-close"
                             v-tooltip.top="'Chiudi'" aria-label="Chiudi" @click="store.lastPick = null" />
                     <MovieCard :movie="store.lastPick.movie">
+                        <!-- Dove vederlo: una riga sua, sopra i bottoni. -->
+                        <PlatformLinks v-if="store.lastPick.movie.imdb_id" :imdb-id="store.lastPick.movie.imdb_id" />
                         <Tag v-if="store.lastPick.movie.watched" severity="success" value="Visto" icon="pi pi-check" />
-                        <template v-else>
-                            <Button label="Lo guardiamo!" icon="pi pi-check" severity="success" @click="markWatched" />
+                        <!-- Larghi uguale; su mobile uno sotto l'altro, a tutta colonna (style.css). -->
+                        <div v-else class="draw-actions">
+                            <Button label="Watch it!" icon="pi pi-check" severity="success" @click="markWatched" />
                             <Button label="Un altro" icon="pi pi-refresh" severity="secondary" outlined
                                     :disabled="!candidates || busy" @click="draw" />
-                        </template>
+                        </div>
                     </MovieCard>
                 </div>
             </Transition>

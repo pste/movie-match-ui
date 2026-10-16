@@ -17,10 +17,9 @@ const yearGenre = computed(() => [props.movie.year, ...props.movie.genres].filte
         <div class="movie-card-body">
             <h2 class="movie-card-title"><ImdbLink :movie="movie" /></h2>
             <div class="text-muted">{{ yearGenre }}</div>
-            <div v-if="movie.director">Regia di {{ movie.director }}</div>
-            <div v-if="movie.user_name" class="movie-card-user">
-                <i class="pi pi-user" /> Proposto da <strong>{{ movie.user_name }}</strong>
-            </div>
+            <div v-if="movie.director" class="movie-card-director">Regia di {{ movie.director }}</div>
+            <!-- Chi l'ha proposto: lo stesso tag della lista. -->
+            <Tag v-if="movie.user_name" :value="movie.user_name" icon="pi pi-user" class="movie-card-user" />
             <p v-if="movie.notes" class="movie-card-notes">{{ movie.notes }}</p>
             <div class="movie-card-actions">
                 <slot />
