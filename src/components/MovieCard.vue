@@ -13,7 +13,11 @@ const yearGenre = computed(() => [props.movie.year, ...props.movie.genres].filte
 
 <template>
     <article class="movie-card">
-        <MoviePoster :src="movie.poster_url" size="large" />
+        <!-- Colonna larga quanto la locandina; lo slot "poster" va sotto di lei. -->
+        <div class="movie-card-side">
+            <MoviePoster :src="movie.poster_url" size="large" />
+            <slot name="poster" />
+        </div>
         <div class="movie-card-body">
             <h2 class="movie-card-title"><ImdbLink :movie="movie" /></h2>
             <div class="text-muted">{{ yearGenre }}</div>

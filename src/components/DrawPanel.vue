@@ -122,8 +122,10 @@ function markWatched() {
                     <Button icon="pi pi-times" severity="secondary" text rounded class="draw-close"
                             v-tooltip.top="'Chiudi'" aria-label="Chiudi" @click="store.lastPick = null" />
                     <MovieCard :movie="store.lastPick.movie">
-                        <!-- Dove vederlo: una riga sua, sopra i bottoni. -->
-                        <PlatformLinks v-if="store.lastPick.movie.imdb_id" :imdb-id="store.lastPick.movie.imdb_id" />
+                        <!-- Dove vederlo: sotto la locandina, larghi quanto lei. -->
+                        <template #poster>
+                            <PlatformLinks v-if="store.lastPick.movie.imdb_id" :imdb-id="store.lastPick.movie.imdb_id" />
+                        </template>
                         <Tag v-if="store.lastPick.movie.watched" severity="success" value="Visto" icon="pi pi-check" />
                         <!-- Larghi uguale; su mobile uno sotto l'altro, a tutta colonna (style.css). -->
                         <div v-else class="draw-actions">

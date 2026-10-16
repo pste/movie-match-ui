@@ -242,6 +242,16 @@ h1, h2 {
     background-color: var(--p-highlight-background);
 }
 
+/* Locandina e loghi delle piattaforme. min-content: la larghezza la da' la
+   locandina, i loghi al 100% non la allargano. */
+.movie-card-side {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 0.5rem;
+    width: min-content;
+}
+
 .movie-card-body {
     display: flex;
     flex-direction: column;
@@ -343,49 +353,79 @@ h1, h2 {
 
 /* ---------- piattaforme streaming ---------- */
 
-/* Dentro .movie-card-actions: occupa una riga intera, sopra i bottoni. */
+/* Sotto la locandina del film estratto, uno sotto l'altro e larghi quanto
+   lei (la colonna e' .movie-card-side). */
 .platform-links {
     display: flex;
-    flex-basis: 100%;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 0.5rem;
 }
 
+/* Un bottone (copia il link) che sembra solo il logo. */
 .platform-link {
-    display: inline-flex;
-    align-items: center;
-    border-radius: var(--p-border-radius-sm);
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
     color: inherit;
-    text-decoration: none;
+    font: inherit;
+    cursor: pointer;
     transition: transform 0.15s ease;
 }
 
-.platform-link:hover {
-    transform: scale(1.08);
+.platform-link:disabled {
+    cursor: default;
+}
+
+.platform-link:hover:not(:disabled) {
+    transform: scale(1.04);
+}
+
+/* Tutti 5:2, come i loghi in src/assets/platforms. Quelli di IMDb (16:9),
+   per le piattaforme senza logo nostro, cover li ritaglia sopra e sotto. */
+.platform-logo,
+.platform-missing,
+.platform-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 5 / 2;
+    border-radius: var(--p-border-radius-sm);
 }
 
 .platform-logo {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--p-border-radius-sm);
+    object-fit: cover;
 }
 
-/* Nessuna piattaforma ha il film: un "?" grande quanto un logo. */
+/* Al posto del logo, finche' non ce n'e' uno: un riquadro tenue a righe
+   diagonali, con icona e scritta in colonna. */
 .platform-missing {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--p-border-radius-sm);
-    border: 1px dashed var(--p-text-muted-color);
+    flex-direction: column;
+    gap: 0.3rem;
     color: var(--p-text-muted-color);
+    background:
+        repeating-linear-gradient(135deg, transparent 0 6px,
+            color-mix(in srgb, var(--p-text-muted-color) 8%, transparent) 6px 12px),
+        color-mix(in srgb, var(--p-text-muted-color) 10%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--p-text-muted-color) 25%, transparent);
+}
+
+.platform-missing .pi {
+    font-size: 1.25rem;
+    opacity: 0.8;
+}
+
+.platform-missing span {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
 /* Se IMDb non da' il logo: il nome, nello stesso spazio. */
 .platform-name {
-    padding: 0.4rem 0.6rem;
-    border-radius: var(--p-border-radius-sm);
     border: 1px solid var(--p-content-border-color);
     font-size: 0.875rem;
 }

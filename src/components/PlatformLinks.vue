@@ -1,23 +1,59 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { api } from '@/plugins/api';
+import crunchyrollLogo from '@/assets/platforms/crunchyroll.webp';
+import disneyplusLogo from '@/assets/platforms/disneyplus.webp';
+import netflixLogo from '@/assets/platforms/netflix.webp';
+import primevideoLogo from '@/assets/platforms/primevideo.webp';
 
 // I loghi delle piattaforme (Netflix, Disney+...) su cui il film e'
-// in abbonamento adesso, come link al film. L'API li chiede a IMDb a ogni
+// in abbonamento adesso: il clic copia il link al film. L'API li chiede a IMDb a ogni
 // estrazione, senza salvarli: cambiano di continuo. Quali piattaforme lo
 // decide l'API (PLATFORMS in movie-match-api/src/imdb.js): qui non si elencano.
 const props = defineProps({
     imdbId: { type: String, required: true },
 });
 
+// I loghi nostri, gia' 5:2, per nome (lo stesso di PLATFORMS nell'API): quelli
+// di IMDb sono 16:9 e ritagliati vengono male. Per una piattaforma senza logo
+// qui si usa quello di IMDb (logo_url).
+const LOCAL_LOGOS = {
+    'Netflix': netflixLogo,
+    'Disney+': disneyplusLogo,
+    'Prime Video': primevideoLogo,
+    'Crunchyroll': crunchyrollLogo,
+};
+
+function logoUrl(platform) {
+    return LOCAL_LOGOS[platform.name] ?? platform.logo_url;
+}
+
+const toast = useToast();
+
+// Il link va negli appunti, non si apre. navigator.clipboard esiste solo in
+// HTTPS (o su localhost): altrove la copia fallisce e lo dice il toast.
+async function copyLink(platform) {
+    try {
+        await navigator.clipboard.writeText(platform.link);
+        toast.add({ severity: 'success', summary: 'Link copiato', detail: platform.name, life: 2500 });
+    }
+    catch {
+        toast.add({ severity: 'error', summary: 'Copia non riuscita', detail: platform.link, life: 5000 });
+    }
+}
+
 const platforms = ref([]);
-// loading finche' IMDb non risponde (non si mostra niente, ne' i loghi ne' il
-// fallback), poi ok o error.
+// loading finche' IMDb non risponde, poi ok o error.
 const status = ref('loading');
 
-// Il fallback "?" quando nessuna delle piattaforme ha il film, o IMDb non
-// risponde: il tooltip dice quale dei due.
+// Il fallback "?" finche' non ci sono loghi: mentre IMDb risponde, quando
+// nessuna delle piattaforme ha il film, o IMDb non risponde. Il tooltip dice
+// quale dei tre.
 const fallbackTooltip = computed(() => {
+    if (status.value === 'loading') {
+        return 'Cerco le piattaforme...';
+    }
     if (status.value === 'error') {
         return 'IMDb non risponde: piattaforme non disponibili';
     }
@@ -45,16 +81,17 @@ watch(() => props.imdbId, async (imdbId) => {
 </script>
 
 <template>
-    <div v-if="status !== 'loading'" class="platform-links">
-        <span v-if="!platforms.length" class="platform-missing" role="img"
-              v-tooltip.top="fallbackTooltip" :aria-label="fallbackTooltip">
-            <i class="pi pi-question" />
-        </span>
-        <a v-for="platform in platforms" :key="platform.name" :href="platform.link"
-           target="_blank" rel="noopener noreferrer" class="platform-link"
-           v-tooltip.top="`Guarda su ${platform.name}`" :aria-label="`Guarda su ${platform.name}`">
-            <img v-if="platform.logo_url" :src="platform.logo_url" :alt="platform.name" class="platform-logo" />
+    <div class="platform-links">
+        <div v-if="!platforms.length" class="platform-missing" role="img"
+             v-tooltip.top="fallbackTooltip" :aria-label="fallbackTooltip">
+            <i class="pi pi-desktop" />
+            <span>Non disponibile</span>
+        </div>
+        <button v-for="platform in platforms" :key="platform.name" type="button" class="platform-link"
+                :disabled="!platform.link" @click="copyLink(platform)"
+                v-tooltip.top="`Copia il link di ${platform.name}`" :aria-label="`Copia il link di ${platform.name}`">
+            <img v-if="logoUrl(platform)" :src="logoUrl(platform)" :alt="platform.name" class="platform-logo" />
             <span v-else class="platform-name">{{ platform.name }}</span>
-        </a>
+        </button>
     </div>
 </template>
