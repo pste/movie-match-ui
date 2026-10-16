@@ -33,6 +33,12 @@ src/
 - La lista si aggiorna ogni 15 secondi (in pausa a scheda nascosta), così si vedono i film
   aggiunti da altri dispositivi.
 - Gli errori delle API diventano toast in un posto solo, `App.vue`.
+- **Icona sulla home di Android**: `public/manifest.json` (`display: standalone`) e le icone in
+  `public/icons/`. Non c'è un service worker, quindi niente offline: Chrome non lo chiede più per
+  installare l'app. Il manifest è `.json` perché il nginx dell'immagine non conosce `.webmanifest`.
+  Le PNG sono `public/favicon.svg` renderizzato a 192 e 512 px su sfondo trasparente; la
+  maskable è 512 px su `#09090b` (lo sfondo scuro dell'app), con il disegno al 78%, dentro la zona
+  sicura. Se cambia il favicon vanno rigenerate.
 
 ## Immagine
 
