@@ -7,7 +7,7 @@ defineProps({
     movie: { type: Object, required: true },
 });
 
-defineEmits(['edit', 'toggle-watched', 'delete']);
+defineEmits(['edit', 'pick', 'delete']);
 </script>
 
 <template>
@@ -24,10 +24,11 @@ defineEmits(['edit', 'toggle-watched', 'delete']);
             </div>
         </div>
         <div class="movie-row-actions">
-            <Button :icon="movie.watched ? 'pi pi-undo' : 'pi pi-check'" severity="secondary" text rounded
-                    v-tooltip.top="movie.watched ? 'Rimetti fra i da vedere' : 'Segna come visto'"
-                    :aria-label="movie.watched ? 'Rimetti fra i da vedere' : 'Segna come visto'"
-                    @click="$emit('toggle-watched', movie)" />
+            <!-- Estrazione forzata: il film esce come se l'avesse scelto
+                 "Estrai", e si segna visto con "Watch it!". -->
+            <Button icon="pi pi-check" severity="secondary" text rounded
+                    v-tooltip.top="'Scegli questo'" aria-label="Scegli questo"
+                    @click="$emit('pick', movie)" />
             <Button icon="pi pi-pencil" severity="secondary" text rounded
                     v-tooltip.top="'Modifica'" aria-label="Modifica" @click="$emit('edit', movie)" />
             <Button icon="pi pi-trash" severity="danger" text rounded

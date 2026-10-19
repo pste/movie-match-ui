@@ -9,7 +9,7 @@ import useMoviesStore from '@/stores/movies';
 
 // I film ancora da vedere. Quelli gia' scelti stanno in WatchedTable.
 const store = useMoviesStore();
-const { toggleWatched, askDelete } = useMovieActions();
+const { askDelete } = useMovieActions();
 
 const searchVisible = ref(false);
 const editVisible = ref(false);
@@ -34,6 +34,18 @@ const countLabel = computed(() => {
     return `${shown.value.length} di ${store.toWatch.length}`;
 });
 
+// Estrazione forzata: il film compare nel pannello dell'estrazione, in cima
+// alla pagina, e ci si torna. Gli errori li mostra gia' App.vue come toast.
+async function pick(movie) {
+    try {
+        await store.draw({ movieId: movie.movie_id });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    catch {
+        // Niente da fare: il toast c'e' gia'.
+    }
+}
+
 function openEdit(movie) {
     editing.value = movie;
     editVisible.value = true;
@@ -53,7 +65,7 @@ function openEdit(movie) {
         <template #content>
             <ul v-if="shown.length" class="movie-rows">
                 <MovieRow v-for="movie in shown" :key="movie.movie_id" :movie="movie"
-                          @edit="openEdit" @toggle-watched="toggleWatched" @delete="askDelete" />
+                          @edit="openEdit" @pick="pick" @delete="askDelete" />
             </ul>
             <p v-else-if="store.toWatch.length" class="empty-state">Nessun film con "{{ query.trim() }}" nel titolo.</p>
             <p v-else class="empty-state">Nessun film da vedere. Aggiungine uno!</p>

@@ -102,9 +102,10 @@ const useMoviesStore = defineStore('movies', () => {
         }
     }
 
-    // filters: { genre, userId }, gli stessi di fetchOdds.
-    async function draw({ genre, userId }) {
-        const pick = await api.post('/draw', { genre, user_id: userId });
+    // filters: { genre, userId }, gli stessi di fetchOdds. movieId e'
+    // l'estrazione forzata di quel film (il "visto" della lista).
+    async function draw({ genre, userId, movieId }) {
+        const pick = await api.post('/draw', { genre, user_id: userId, movie_id: movieId });
         lastPick.value = pick;
         return pick;
     }
