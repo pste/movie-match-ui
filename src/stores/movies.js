@@ -12,6 +12,9 @@ const useMoviesStore = defineStore('movies', () => {
     const movies = ref([]);
     // L'ultima estrazione fatta da QUESTA pagina, mostrata in grande.
     const lastPick = ref(null);
+    // Gli utenti accesi dai tag delle probabilita': filtrano la lista dei
+    // candidati. Vuoto = tutti. null e' "Senza utente".
+    const listUserIds = ref([]);
 
     // I candidati sempre per titolo. L'API li manda gia' ordinati, ma un film
     // appena aggiunto o rimesso fra i da vedere entra in fondo all'array
@@ -90,6 +93,15 @@ const useMoviesStore = defineStore('movies', () => {
         return api.get(`/draw/odds${query}`, { quiet });
     }
 
+    function toggleListUser(userId) {
+        if (listUserIds.value.includes(userId)) {
+            listUserIds.value = listUserIds.value.filter((id) => id !== userId);
+        }
+        else {
+            listUserIds.value = [...listUserIds.value, userId];
+        }
+    }
+
     async function setWatched(movie, value) {
         replaceMovie(await api.put(`/movies/${movie.movie_id}/watched`, { watched: value }));
     }
@@ -111,8 +123,9 @@ const useMoviesStore = defineStore('movies', () => {
     }
 
     return {
-        movies, lastPick, toWatch, watched, genres,
-        load, searchImdb, isInList, lastWatched, addMovie, updateMovie, fetchOdds, setWatched, deleteMovie, draw,
+        movies, lastPick, listUserIds, toWatch, watched, genres,
+        load, searchImdb, isInList, lastWatched, addMovie, updateMovie, fetchOdds, toggleListUser, setWatched,
+        deleteMovie, draw,
     };
 });
 

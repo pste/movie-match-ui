@@ -61,12 +61,24 @@ watch(() => [filters.value, store.movies], async () => {
     }
 }, { deep: true, immediate: true });
 
+// Un utente acceso che sparisce dalle probabilita' (filtro di genere, ultimo
+// suo film visto) filtrerebbe la lista senza un tag da spegnere: si toglie.
+watch(odds, (rows) => {
+    const shown = rows.map((row) => row.user_id);
+    store.listUserIds = store.listUserIds.filter((id) => shown.includes(id));
+});
+
+function isListUser(row) {
+    return store.listUserIds.includes(row.user_id);
+}
+
 function oddsLabel(row) {
     return `${row.user_name || 'Senza utente'} ${Math.round(row.probability * 100)}%`;
 }
 
 function oddsTooltip(row) {
-    return `${row.candidates} film in gioco, ${row.watched} gia' visti`;
+    const action = isListUser(row) ? 'clic per togliere il filtro' : 'clic per filtrare la lista';
+    return `${row.candidates} film in gioco, ${row.watched} gia' visti: ${action}`;
 }
 
 async function draw() {
@@ -108,11 +120,15 @@ function markWatched() {
                 <template v-else>Nessun film da vedere: aggiungine qualcuno alla lista.</template>
             </small>
 
-            <!-- Chi ha avuto meno film visti ha piu' probabilita' di uscire. -->
+            <!-- Chi ha avuto meno film visti ha piu' probabilita' di uscire.
+                 Un clic accende/spegne l'utente come filtro della lista. -->
             <div v-if="odds.length" class="draw-odds">
-                <Tag v-for="row in odds" :key="row.user_id ?? 'none'" :value="oddsLabel(row)"
-                     :severity="row.user_id ? 'secondary' : 'warn'" icon="pi pi-user"
-                     v-tooltip.top="oddsTooltip(row)" />
+                <button v-for="row in odds" :key="row.user_id ?? 'none'" type="button" class="odds-toggle"
+                        :class="{ 'is-active': isListUser(row) }" :aria-pressed="isListUser(row)"
+                        v-tooltip.top="oddsTooltip(row)" @click="store.toggleListUser(row.user_id)">
+                    <Tag :value="oddsLabel(row)" :severity="row.user_id ? 'secondary' : 'warn'"
+                         :icon="isListUser(row) ? 'pi pi-filter-fill' : 'pi pi-user'" />
+                </button>
             </div>
 
             <!-- La key fa ripartire l'animazione a ogni estrazione, anche

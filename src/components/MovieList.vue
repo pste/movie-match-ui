@@ -15,15 +15,16 @@ const searchVisible = ref(false);
 const editVisible = ref(false);
 const editing = ref(null);
 
-// Filtro al volo sul titolo, senza distinzione di maiuscole.
+// Filtro al volo sul titolo, senza distinzione di maiuscole, e per utente
+// (i tag delle probabilita' nel pannello dell'estrazione).
 const query = ref('');
 
 const shown = computed(() => {
     const text = query.value.trim().toLowerCase();
-    if (!text) {
-        return store.toWatch;
-    }
-    return store.toWatch.filter((movie) => movie.title.toLowerCase().includes(text));
+    const userIds = store.listUserIds;
+    return store.toWatch.filter((movie) =>
+        (!text || movie.title.toLowerCase().includes(text)) && (!userIds.length || userIds.includes(movie.user_id))
+    );
 });
 
 // Col filtro attivo il titolo dice quanti se ne vedono su quanti.
@@ -67,6 +68,7 @@ function openEdit(movie) {
                 <MovieRow v-for="movie in shown" :key="movie.movie_id" :movie="movie"
                           @edit="openEdit" @pick="pick" @delete="askDelete" />
             </ul>
+            <p v-else-if="store.toWatch.length && store.listUserIds.length" class="empty-state">Nessun film con questi filtri.</p>
             <p v-else-if="store.toWatch.length" class="empty-state">Nessun film con "{{ query.trim() }}" nel titolo.</p>
             <p v-else class="empty-state">Nessun film da vedere. Aggiungine uno!</p>
         </template>

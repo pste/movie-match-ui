@@ -584,3 +584,24 @@ h1, h2 {
     gap: 0.4rem;
     margin-top: 0.75rem;
 }
+
+/* Il bottone e' solo un involucro cliccabile attorno al Tag. */
+.odds-toggle {
+    padding: 0;
+    border: none;
+    border-radius: var(--p-tag-border-radius, 6px);
+    background: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+.odds-toggle:focus-visible {
+    outline: 2px solid var(--p-primary-color);
+    outline-offset: 2px;
+}
+
+/* Due classi: col solo .p-tag vincerebbe il tema di PrimeVue. */
+.odds-toggle.is-active .p-tag {
+    background: var(--p-primary-color);
+    color: var(--p-primary-contrast-color);
+}
